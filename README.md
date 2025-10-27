@@ -1,4 +1,4 @@
-# Welcome to MathVision! 🧮✨📈
+# Welcome to MathVision! ⚡️
 
 **Demo:** https://mathvision1.pythonanywhere.com/
 
