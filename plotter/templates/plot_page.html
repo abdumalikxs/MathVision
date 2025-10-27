@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>MathVision</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 920px;
+        margin: 24px auto;
+        padding: 0 16px;
+        display: flex;
+        gap: 24px;
+      }
+      main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      aside {
+        width: 320px;
+        position: sticky;
+        top: 24px;
+        align-self: flex-start;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        background: #fafafa;
+        padding: 12px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      form {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 12px;
+      }
+      input,
+      button,
+      textarea {
+        padding: 8px 12px;
+        font-size: 1rem;
+        font-family: inherit;
+        box-sizing: border-box;
+      }
+      input[type="text"] {
+        flex: 1 1 40ch;
+        min-width: 0;
+      }
+      input[type="number"] {
+        width: 5rem;
+      }
+      button {
+        cursor: pointer;
+        background: #0b6;
+        border: none;
+        color: white;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+      }
+      button:hover {
+        background: #095c04;
+      }
+      .hint {
+        color: #666;
+        font-size: 12px;
+        margin: 6px 0 12px;
+      }
+      img {
+        width: 100%;
+        height: auto;
+        border: 1px solid #eee;
+        border-radius: 4px;
+      }
+      h1,
+      h2 {
+        margin: 0 0 12px 0;
+      }
+      .error {
+        color: #b00020;
+      }
+      .ok {
+        color: #0b6;
+      }
+      textarea {
+        resize: vertical;
+        width: 100%;
+        min-height: 80px;
+        font-family: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>MathVision</h1>
+
+      <!-- Plot form (GET) -->
+      <form method="get" action="{% url 'home' %}">
+        <input
+          type="text"
+          name="f"
+          value="{{ f }}"
+          placeholder="f(x), e.g. sin(x); x**2/10"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+        />
+        <input
+          type="number"
+          name="xmin"
+          value="{{ xmin }}"
+          step="1"
+          aria-label="xmin"
+        />
+        <input
+          type="number"
+          name="xmax"
+          value="{{ xmax }}"
+          step="1"
+          aria-label="xmax"
+        />
+        <button type="submit" aria-label="Plot function">Plot</button>
+      </form>
+      <div class="hint" aria-live="polite">
+        Supported:
+        <code>sin, cos, tan, exp, log, sqrt, abs</code>. Multiple curves with
+        ‘;’. Example: <code>sin(x); x**2/10</code>. You can also use
+        <code>^</code> for powers (auto-converted to <code>**</code>).
+      </div>
+
+      <img
+        src="{% url 'plot_image' %}?f={{ f|urlencode }}&xmin={{ xmin }}&xmax={{ xmax }}"
+        alt="Plot of the function(s)"
+      />
+    </main>
+    <aside>
+      <section>
+        <h2>Ask Gemini about this function</h2>
+        <div class="hint" aria-live="polite">
+          {% if gemini_on %}
+          <span class="ok">Gemini: ready</span>
+          {% else %}
+          <span class="error">Gemini: not configured (set GEMINI_API_KEY)</span>
+          {% endif %}
+        </div>
+        <form method="post" action="{% url 'home' %}">
+          {% csrf_token %}
+          <textarea
+            name="question"
+            rows="4"
+            placeholder="e.g., Where are the maxima between xmin and xmax?"
+            aria-label="Question for Gemini"
+          ></textarea>
+          <!-- keep current function/range in hidden inputs -->
+          <input type="hidden" name="f_hidden" value="{{ f }}" />
+          <input type="hidden" name="xmin_hidden" value="{{ xmin }}" />
+          <input type="hidden" name="xmax_hidden" value="{{ xmax }}" />
+          <div>
+            <button type="submit">Ask Gemini</button>
+          </div>
+        </form>
+      </section>
+      <section>
+        <h2>Answer</h2>
+        <div>
+          {% if ai_error %}
+          <div class="error" role="alert">{{ ai_error }}</div>
+          {% elif ai_answer %}
+          <pre style="white-space: pre-wrap" aria-live="polite">
+{{ ai_answer }}</pre
+          >
+          {% else %}
+          <div class="hint">
+            No question yet. Ask something about the plotted function.
+          </div>
+          {% endif %}
+        </div>
+      </section>
+    </aside>
+  </body>
+</html>
