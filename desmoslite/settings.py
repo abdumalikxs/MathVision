@@ -1,12 +1,21 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get(
-    "DJANGO_SECRET_KEY", "dev-secret-not-for-production")
-DEBUG = False
-ALLOWED_HOSTS = ["mathvision.pythonanywhere.com"]
+load_dotenv(BASE_DIR / ".env")
+
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+DEBUG = True
+
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "mathvision1.pythonanywhere.com",
+]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -67,9 +76,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
-
-CSRF_TRUSTED_ORIGINS = ["https://mathvision.pythonanywhere.com"]
+CSRF_TRUSTED_ORIGINS = ["https://mathvision1.pythonanywhere.com"]
 
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
