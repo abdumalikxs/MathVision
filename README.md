@@ -4,6 +4,7 @@
 
 
 https://github.com/user-attachments/assets/3dcb7031-2412-4019-956d-8ca51818cd51
+<img width="1440" height="900" alt="Screenshot 2025-10-28 at 08 34 44" src="https://github.com/user-attachments/assets/b78f5b29-7de6-43eb-a1a9-3126ca95e778" />
 
 
 ---
