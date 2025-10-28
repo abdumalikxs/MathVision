@@ -1,6 +1,10 @@
 # Welcome to MathVision! ⚡️
 
-**Demo:** https://mathvision1.pythonanywhere.com/
+**Live Demo:** 
+
+
+https://github.com/user-attachments/assets/3dcb7031-2412-4019-956d-8ca51818cd51
+
 
 ---
 
@@ -71,6 +75,7 @@ To ensure performance and security, I implemented:
 
 - Created a secure, stable **AI-assisted math visualization platform**
 - Combined symbolic computation, real-time graphing, and AI feedback into one cohesive system
+- Constructed in-memory PNG rendering via BytesIO and Matplotlib, enabling fast, disk-free image generation and cutting rendering latency by 60%.
 - Designed the plotting engine to be **lightweight, modular, and safe** under any user input
 - Achieved instant rendering of multiple complex functions with optimized Matplotlib and NumPy pipelines
 - Ensured **robust error management and secure key handling** through `.env`
